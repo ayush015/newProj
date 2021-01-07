@@ -4,6 +4,7 @@ import { useTransition, animated } from "react-spring";
 import Layout from "./components/layout/index";
 import Home from "./routes/home/index";
 import Login from "./routes/login/index";
+import Signup from "./routes/signup/index";
 import Article from "./routes/article/index";
 import NewArticle from "./routes/NewArticle/index";
 
@@ -27,7 +28,8 @@ const App = () => {
             <Switch location={item}>
               <Route strict exact path="/" component={Home} />
               <Route exact path="/login" component={Login} />
-              <Route path="/article/:slug" component={Article} />
+              <Route exact path="/signup" component={Signup} />
+              <Route path="/article/:postId" component={Article} />
               <Route path="/edit/:slug" component={NewArticle} />
               <Route path="/new/article" component={NewArticle} />
               <Redirect to="/" />

@@ -1,58 +1,85 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
+import { authenticate, isAuthenticated, signin } from "../helper/apicalls";
 import Style from "./Login.module.css";
-import axios from "axios";
 
 const Login = () => {
-  let history = useHistory();
-  const [loginForm, setLoginForm] = useState({
+  const [value, setValue] = useState({
     email: "",
     password: "",
+    error: "",
+    redirect: false,
   });
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setLoginForm({ ...loginForm, [name]: value });
+  const { email, password, error, redirect } = value;
+  // const { user } = isAuthenticated();
+
+  const handleChange = (name) => (e) => {
+    setValue({ ...value, error: false, [name]: e.target.value });
+  };
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setValue({ ...value, error: false });
+    signin({ email, password }).then((data) => {
+      console.log(data);
+      if (data.error) {
+        setValue({ ...value, error: data.error });
+      } else {
+        authenticate(data, () => {
+          setValue({ ...value, redirect: true });
+        });
+      }
+    });
   };
 
-  const onSubmit = async (event) => {
-	event.preventDefault();
-	try {
-		const response = await axios.post(
-		  "https://rhodlib-blog.herokuapp.com/api/user/login",
-		  loginForm
-		);
-		sessionStorage.setItem("token", response.data.token);
-		if (sessionStorage.token) {
-		  history.push("/");
-		}
-	} catch(err) {
-		console.log({error: err});
-	}
+  const errorMessage = () => {
+    return (
+      <div
+        style={{
+          display: error ? "" : "none",
+          width: "100%",
+          height: "50px",
+          color: "#000",
+          textAlign: "center",
+          backgroundColor: "red",
+        }}
+      >
+        {error}
+      </div>
+    );
   };
 
+  const performRedirect = () => {
+    if (redirect) {
+      if (isAuthenticated()) {
+        return <Redirect to="/"></Redirect>;
+      }
+    }
+  };
   return (
     <div className={Style.login}>
-      <form onSubmit={onSubmit}>
+      <form>
         <h2>Login</h2>
+        {errorMessage()}
         <input
           placeholder="Email"
           type="email"
+          onChange={handleChange("email")}
           required
           name="email"
-          value={loginForm.email}
-          onChange={handleInputChange}
         />
         <input
           placeholder="Password"
           type="password"
+          onChange={handleChange("password")}
           required
           name="password"
-          value={loginForm.password}
-          onChange={handleInputChange}
         />
-        <button type="submit">access</button>
+        <button onClick={onSubmit} type="submit">
+          Login
+        </button>
       </form>
+      {performRedirect()}
     </div>
   );
 };

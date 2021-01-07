@@ -1,67 +1,49 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
-import axios from "axios";
+import { useParams } from "react-router-dom";
 import Style from "./Article.module.css";
 import Blogheader from "../../components/blogheader/index";
 import ReactMarkdown from "react-markdown";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import { API } from "../../backend";
 
 const Article = () => {
-  let history = useHistory();
-  const [article, setArticle] = useState({});
-  const { slug } = useParams();
+  const [article, setArticle] = useState({
+    title: "",
+    description: "",
+    markdown: "",
+  });
+
+  const { title, description, markdown } = article;
+  const { postId } = useParams();
 
   useEffect(() => {
-    getDataBySlug(slug);
-  }, [slug]);
+    getPostById();
+  }, []);
+  const getPostById = (post) => {
+    return fetch(`${API}/api/post/${postId}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(post),
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setArticle({
+          ...article,
+          title: data.title,
+          description: data.description,
+          markdown: data.markdown,
+        });
+      })
 
-  const getDataBySlug = async (slug) => {
-    try {
-      const res = await axios.get(
-        `https://rhodlib-blog.herokuapp.com/api/post/${slug}`
-      );
-      setArticle(res.data);
-    } catch (err) {
-      console.log({ error: err });
-    }
+      .catch((err) => console.log(err));
   };
 
-  const deleteArticle = async (id) => {
-    if (window.confirm("Do you wanna delete this article?")) {
-      try {
-        axios.defaults.headers.common["Authorization"] = sessionStorage.token;
-        await axios.delete(
-          `https://rhodlib-blog.herokuapp.com/api/delete/${id}`
-        );
-        history.push("/");
-      } catch (err) {
-        console.log({ error: err });
-      }
-    }
-  };
-
-  const editDeleteArticle = (id) => {
-    if (sessionStorage.token) {
-      return (
-        <div className={Style.buttons}>
-          <button
-            onClick={() => deleteArticle(id)}
-            className={Style.linkButton}
-          >
-            Delete
-          </button>
-          <button
-            onClick={() => history.push(`/edit/${slug}`)}
-            className={Style.linkButton}
-          >
-            Edit
-          </button>
-        </div>
-      );
-    }
-  };
-
-  const renderMarkdown = () => {
+  const Markdown = () => {
     if (article.markdown === undefined) {
       return (
         <SkeletonTheme color="#161f27" highlightColor="#324759">
@@ -69,9 +51,7 @@ const Article = () => {
         </SkeletonTheme>
       );
     } else {
-      return (
-        <ReactMarkdown className={Style.markdown} source={article.markdown} />
-      );
+      return <ReactMarkdown className={Style.markdown} source={markdown} />;
     }
   };
 
@@ -79,15 +59,14 @@ const Article = () => {
     <div className={Style.article}>
       <div className={Style.controlHeader}>
         <Blogheader
-          image={article.image}
-          title={article.title}
-          description={article.description}
+          title={title}
+          description={description}
           createdAt={article.createdAt}
         />
-        {editDeleteArticle(article._id)}
+        {/* {editDeleteArticle(article._id)} */}
       </div>
       <hr />
-      {renderMarkdown()}
+      {Markdown()}
     </div>
   );
 };

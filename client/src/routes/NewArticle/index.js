@@ -1,103 +1,93 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import Style from "./NewArticle.module.css";
-import { useHistory, useParams } from "react-router-dom";
+import { isAuthenticated } from "../helper/apicalls";
+import { newArticle } from "./helper/apicall";
+import { Redirect } from "react-router-dom";
 
 const NewArticle = () => {
-  let history = useHistory();
-  let { slug } = useParams();
-  const [editing, setEditing] = useState(false);
-  const [id, setId] = useState("");
-  const [article, setArticle] = useState({
-    image: "",
+  const [post, setPost] = useState({
     title: "",
     description: "",
     markdown: "",
+    user: "",
+    redirect: false,
   });
+  const {
+    user: { _id },
+    token,
+  } = isAuthenticated();
 
-  useEffect(() => {
-    if (slug) {
-      getArticleBySlug(slug);
-      setEditing(true);
-    }
-  }, [slug]);
+  const { title, description, markdown, user, redirect } = post;
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
 
-  const getArticleBySlug = async (slug) => {
-    try {
-      const res = await axios.get(`https://rhodlib-blog.herokuapp.com/api/post/${slug}`);
-      setArticle(res.data);
-      setId(res.data._id);
-    } catch (err) {
-      console.log({ error: err });
-    }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setError("");
+    setPost({
+      ...post,
+      [name]: value,
+    });
   };
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setArticle({ ...article, [name]: value });
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess(false);
+    console.log(_id, token);
+
+    newArticle(_id, token, { title, description, markdown, user: _id })
+      .then((data) => {
+        console.log(data);
+        if (data.error) {
+          setError(true);
+        } else {
+          setError("");
+          setPost({ title: "", description: "", markdown: "", redirect: true });
+        }
+      })
+      .catch((err) => console.log(err));
   };
-
-  const onSubmit = async (event) => {
-    event.preventDefault();
-
-    if (sessionStorage.token) {
-      if (editing) {
-        try {
-          axios.defaults.headers.common["Authorization"] = sessionStorage.token;
-          await axios.put(`https://rhodlib-blog.herokuapp.com/api/update/${id}`, article);
-          history.push(`/article/${slug}`);
-        } catch (err) {
-          console.log({ error: err });
-        }
-      } else {
-        try {
-          axios.defaults.headers.common["Authorization"] = sessionStorage.token;
-          await axios.post("https://rhodlib-blog.herokuapp.com/api/new/post", article);
-          history.push("/");
-        } catch (err) {
-          console.log({ error: err });
-        }
+  const performRedirect = () => {
+    if (redirect) {
+      if (isAuthenticated()) {
+        return <Redirect to="/"></Redirect>;
       }
     }
   };
-
   return (
-    <form className={Style.form} onSubmit={onSubmit}>
-      <input
-        type="text"
-        required
-        placeholder="Url image layout"
-        name="image"
-        value={article.image}
-        onChange={handleInputChange}
-      />
+    <form className={Style.form}>
+      {/* <input type="text" required placeholder="Url image layout" name="image" /> */}
       <input
         type="text"
         required
         placeholder="Title"
+        value={post.title}
         name="title"
-        value={article.title}
-        onChange={handleInputChange}
+        onChange={handleChange}
       />
       <input
         type="text"
         required
         placeholder="Description"
+        value={post.description}
         name="description"
-        value={article.description}
-        onChange={handleInputChange}
+        onChange={handleChange}
       />
       <textarea
         required
         placeholder="Markdown here"
+        value={post.markdown}
         name="markdown"
-        value={article.markdown}
-        onChange={handleInputChange}
+        onChange={handleChange}
       />
       <div>
-        <button onClick={() => history.goBack()}>Back</button>
-        <button type="submit">{editing ? "Edit" : "Create"}</button>
+        <button>Back</button>
+        <button onClick={onSubmit} type="submit">
+          create
+        </button>
       </div>
+      {performRedirect()}
     </form>
   );
 };

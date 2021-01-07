@@ -1,24 +1,30 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Fragment } from "react";
+import { Link, withRouter } from "react-router-dom";
+import { isAuthenticated, signout } from "../../routes/helper/apicalls";
 import Style from "./Header.module.css";
 
-const Header = () => {
-  const handleClearStorage = () => {
-    if (sessionStorage.token) {
-      sessionStorage.removeItem("token");
-    }
-  };
-
+const Header = ({ history }) => {
   const loginLogout = () => {
-    return sessionStorage.token ? (
-      <>
-        <Link onClick={handleClearStorage} to="/">
-          Logout
-        </Link>
+    return isAuthenticated() ? (
+      <Fragment>
+        <span
+          onClick={() => {
+            signout(() => {
+              history.push("/login");
+            });
+          }}
+          style={{ color: "yellow", cursor: "pointer" }}
+        >
+          LOGOUT
+        </span>
         <Link to="/new/article">Create</Link>
-      </>
+      </Fragment>
     ) : (
-      <Link to="/login">Login</Link>
+      <Fragment>
+        <Link to="/login">Login</Link>
+        <Link to="/signup">signup</Link>
+      </Fragment>
     );
   };
 
@@ -33,4 +39,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default withRouter(Header);
