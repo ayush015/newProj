@@ -1,64 +1,82 @@
-//Imports
 const Post = require("../models/Post");
 
-//Object
-const PostCtrl = {};
+exports.getPostById = (req, res, next, id) => {
+  Post.findById(id)
+    .populate("user")
+    .exec((err, post) => {
+      if (err || !post) {
+        return res.status(400).json({
+          error: " No post was found in DB",
+        });
+      }
 
-//Functions
+      req.postProfile = post;
 
-PostCtrl.getPosts = async (req, res) => {
-  try {
-    const posts = await Post.find();
-    if (posts) {
-      res.status(200).send(posts);
-    } else {
-      res.status(404).send({ error: "Notes not found" });
+      console.log(req.postProfile);
+      next();
+    });
+};
+
+exports.getPost = (req, res) => {
+  return res.json(req.postProfile);
+};
+exports.getPosts = (req, res) => {
+  Post.find().exec((err, found) => {
+    if (err) {
+      return res.status(400).json({
+        error: "Posts Not Found",
+      });
     }
-  } catch (error) {
-    res.status(500).send(error);
-  }
+    res.json(found);
+  });
 };
 
-PostCtrl.createPost = async (req, res) => {
+exports.createPost = (req, res) => {
   const newPost = new Post(req.body);
-  try {
-    await newPost.save();
-    res.status(200).send({ message: "Post Created" });
-  } catch (error) {
-    res.status(500).send(error);
-  }
+  newPost.save((err, post) => {
+    console.log(err);
+    if (err) {
+      return res.status(400).json({
+        error: "Error creating your post",
+      });
+    }
+
+    res.json({ post });
+  });
 };
 
-PostCtrl.getPostBySlug = async (req, res) => {
-  try {
-    const post = await Post.findOne({slug: req.params.slug});
-    res.status(200).send(post);
-  } catch (err) {
-    res.status(404).send(err);
-  }
+exports.getPostBySlug = (req, res) => {
+  const post = Post.findOne({ slug: req.param.slug }, (err, found) => {
+    // console.log(found);
+    if (err) {
+      return res.status(400).json({
+        error: "Error finding the post",
+      });
+    }
+    res.json(found);
+  });
 };
 
-PostCtrl.updatePost = async (req, res) => {
+exports.updatePost = (req, res) => {
   const { image, title, description, markdown } = req.body;
-  try {
-    await Post.findOneAndUpdate(
-      { _id: req.params.id },
-      { image, title, description, markdown }
-    );
-    res.status(200).send({ message: "Post update successfully" });
-  } catch (error) {
-    res.status(500).send(error);
-  }
+  Post.findOneAndUpdate(
+    { _id: req.params.id },
+    { image, title, description, markdown }
+  );
 };
 
-PostCtrl.deletePost = async (req, res) => {
-  try {
-    await Post.findOneAndDelete({ _id: req.params.id });
-    res.status(200).send({ message: "Post deleted successfully" });
-  } catch (error) {
-    res.status(500).send(error);
-  }
+exports.deletePost = (req, res) => {
+  Post.findOneAndDelete({ _id: req.params.id });
+  res.status(200).send({ message: "Post deleted successfully" });
 };
 
-//Export
-module.exports = PostCtrl;
+exports.getUsersPostByUsername = (req, res) => {
+  Post.find({ user: req.postProfile.user.username }).exec((err, found) => {
+    if (err) {
+      return res.status(400).json({
+        error: "NO posts found",
+      });
+    }
+    res.json({ found });
+  });
+};

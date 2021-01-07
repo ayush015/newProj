@@ -1,11 +1,15 @@
-//Imports
-const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
+
 const slugify = require("slugify");
 
 //Post Schema
-const postSchema = new Schema(
+const postSchema = new mongoose.Schema(
   {
     image: String,
+    user: {
+      type: String,
+      ref: "User",
+    },
     title: {
       type: String,
       required: true,
@@ -13,7 +17,6 @@ const postSchema = new Schema(
     description: String,
     markdown: {
       type: String,
-      required: true,
     },
     createdAt: {
       type: Date,
@@ -22,25 +25,25 @@ const postSchema = new Schema(
     slug: {
       type: String,
       required: true,
-      unique: true
-    }
+      unique: true,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-postSchema.pre("validate", function(next) {
+postSchema.pre("validate", function (next) {
   const post = this;
-  
-  if(post.title) {
+
+  if (post.title) {
     post.slug = slugify(post.title, { lower: true, strict: true });
   }
 
   next();
-})
+});
 
-const Post = model("Post", postSchema);
+const Post = mongoose.model("Post", postSchema);
 
 //Export
 module.exports = Post;

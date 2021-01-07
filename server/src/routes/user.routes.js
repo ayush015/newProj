@@ -1,11 +1,14 @@
-//Imports
-const { Router } = require("express");
-const router = Router();
-const { userLogout } = require("../controllers/user.controller");
-const auth = require("../middlewares/auth");
+const express = require("express");
+const router = express.Router();
+const {
+  isSignedIn,
+  isAuthenticated,
+} = require("../controllers/auth.controller");
 
+const { getuserById, getUser } = require("../controllers/user.controller");
+router.param("userId", getuserById);
 //Routes
-router.post("/api/user/logout", auth, userLogout);
+router.get("/api/user/:userId", isSignedIn, isAuthenticated, getUser);
 
 //Export
 module.exports = router;
