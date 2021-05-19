@@ -34,7 +34,6 @@ exports.getPosts = (req, res) => {
 exports.createPost = (req, res) => {
   const newPost = new Post(req.body);
   newPost.save((err, post) => {
-    console.log(err);
     if (err) {
       return res.status(400).json({
         error: "Error creating your post",

@@ -8,12 +8,13 @@ import { API } from "../../backend";
 
 const Article = () => {
   const [article, setArticle] = useState({
+    image: "",
     title: "",
     description: "",
     markdown: "",
   });
 
-  const { title, description, markdown } = article;
+  const { image, title, description, markdown } = article;
   const { postId } = useParams();
 
   useEffect(() => {
@@ -34,6 +35,7 @@ const Article = () => {
       .then((data) => {
         setArticle({
           ...article,
+          image: data.image,
           title: data.title,
           description: data.description,
           markdown: data.markdown,
@@ -59,6 +61,7 @@ const Article = () => {
     <div className={Style.article}>
       <div className={Style.controlHeader}>
         <Blogheader
+          image={image}
           title={title}
           description={description}
           createdAt={article.createdAt}

@@ -35,6 +35,7 @@ const Home = () => {
               onClick={() => history.push(`/article/${post._id}`)}
             >
               <Blogheader
+                image={post.image}
                 title={post.title}
                 description={post.description}
                 createdAt={post.createdAt}

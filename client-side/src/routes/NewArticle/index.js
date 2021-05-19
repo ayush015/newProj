@@ -6,6 +6,7 @@ import { Redirect } from "react-router-dom";
 
 const NewArticle = () => {
   const [post, setPost] = useState({
+    image: "",
     title: "",
     description: "",
     markdown: "",
@@ -17,12 +18,13 @@ const NewArticle = () => {
     token,
   } = isAuthenticated();
 
-  const { title, description, markdown, user, redirect } = post;
+  const { image, title, description, markdown, user, redirect } = post;
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setError("");
     setPost({
       ...post,
@@ -34,16 +36,19 @@ const NewArticle = () => {
     e.preventDefault();
     setError("");
     setSuccess(false);
-    console.log(_id, token);
-
-    newArticle(_id, token, { title, description, markdown, user: _id })
+    newArticle(_id, token, { image, title, description, markdown, user: _id })
       .then((data) => {
-        console.log(data);
         if (data.error) {
           setError(true);
         } else {
           setError("");
-          setPost({ title: "", description: "", markdown: "", redirect: true });
+          setPost({
+            image: "",
+            title: "",
+            description: "",
+            markdown: "",
+            redirect: true,
+          });
         }
       })
       .catch((err) => console.log(err));
@@ -55,9 +60,17 @@ const NewArticle = () => {
       }
     }
   };
+
   return (
     <form className={Style.form}>
-      {/* <input type="text" required placeholder="Url image layout" name="image" /> */}
+      <input
+        type="text"
+        required
+        placeholder="Url image layout"
+        name="image"
+        value={post.image}
+        onChange={handleChange}
+      />
       <input
         type="text"
         required

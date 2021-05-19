@@ -6,7 +6,7 @@ const Footer = () => (
     <ul>
       <li>
         <a
-          href="https://www.instagram.com/rhodlib_"
+          href="https://www.instagram.com/ayush.sri/"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -15,7 +15,7 @@ const Footer = () => (
       </li>
       <li>
         <a
-          href="https://twitter.com/rhodlib"
+          href="https://twitter.com/thecodemancer"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -24,16 +24,7 @@ const Footer = () => (
       </li>
       <li>
         <a
-          href="https://t.me/rhodlib"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Telegram
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/rhodlib"
+          href="https://github.com/ayush015"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -42,20 +33,15 @@ const Footer = () => (
       </li>
       <li>
         <a
-          href="https://bitbucket.org/rhodlib"
+          href="https://ayush015.github.io/Ayush-Srivastava/"
           target="_blank"
           rel="noopener noreferrer"
         >
-          BitBucket
-        </a>
-      </li>
-      <li>
-        <a href="https://rhodlib.me" target="_blank" rel="noopener noreferrer">
           Website
         </a>
       </li>
     </ul>
-    <p>Created by Rhodlib</p>
+    <p>Created by Ayush Srivastava</p>
   </footer>
 );
 

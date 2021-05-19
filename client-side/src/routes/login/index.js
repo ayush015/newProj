@@ -21,7 +21,6 @@ const Login = () => {
     e.preventDefault();
     setValue({ ...value, error: false });
     signin({ email, password }).then((data) => {
-      console.log(data);
       if (data.error) {
         setValue({ ...value, error: data.error });
       } else {
