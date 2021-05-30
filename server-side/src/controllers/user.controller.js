@@ -13,9 +13,13 @@ exports.getuserById = (req, res, next, id) => {
   });
 };
 exports.getUser = (req, res) => {
-  req.profile.salt = undefined;
-  req.profile.encrypt_password = undefined;
-  req.profile.createdAt = undefined;
-  req.profile.updatedAt = undefined;
+  req.profile.salt =
+    req.profile.encrypt_password =
+    req.profile.createdAt =
+    req.profile.updatedAt =
+      undefined;
+  // req.profile.encrypt_password = undefined;
+  // req.profile.createdAt = undefined;
+  // req.profile.updatedAt = undefined;
   return res.json(req.profile);
 };

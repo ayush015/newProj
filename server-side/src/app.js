@@ -11,7 +11,7 @@ const postRoutes = require("./routes/post.routes");
 app.set("port", process.env.PORT || 4000);
 
 //Middlewares
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

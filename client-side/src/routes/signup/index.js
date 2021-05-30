@@ -41,12 +41,12 @@ const Signup = () => {
     return (
       <div
         style={{
-          display: success ? "" : "none",
+          display: success ? "block" : "none",
           width: "100%",
           height: "50px",
-          color: "#000",
+          color: "#fff",
           textAlign: "center",
-          backgroundColor: "#fff",
+          backgroundColor: "#000",
         }}
       >
         Account Created SuccessFully
@@ -57,12 +57,12 @@ const Signup = () => {
     return (
       <div
         style={{
-          display: success ? "none" : "",
+          display: success ? "none" : "block ",
           width: "100%",
           height: "50px",
-          color: "#000",
+          color: "#fff",
           textAlign: "center",
-          backgroundColor: "#fff",
+          backgroundColor: "#000",
         }}
       >
         {error}

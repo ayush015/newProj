@@ -11,28 +11,19 @@ const userSchema = new Schema(
       unique: true,
       required: true,
     },
+    // for Oauth2.0 in progress
+    authProvider: String,
+    providerId: String,
     email: {
       type: String,
       required: true,
       unique: true,
     },
-    isAdmin: {
-      type: Boolean,
-      default: true,
-    },
     encrypt_password: {
       type: String,
-      required: true,
+      // required: true,
     },
     salt: String,
-    tokens: [
-      {
-        token: {
-          type: String,
-          require: true,
-        },
-      },
-    ],
   },
   {
     timestamps: true,
@@ -70,5 +61,4 @@ userSchema.methods = {
   },
 };
 
-//Export
 module.exports = model("User", userSchema);

@@ -20,9 +20,8 @@ const {
 router.param("userId", getuserById);
 router.param("postId", getPostById);
 
-//Routes
+//get routes
 router.get("/api/post", getPosts);
-// router.get("/api/post/:getPostById", getPostBySlug);
 router.get("/api/post/:postId", getPost);
 router.get(
   "/api/all/post/:userId",
@@ -31,7 +30,7 @@ router.get(
   getUsersPostByUsername
 );
 
-//Only admin
+//post routes
 router.post("/api/new/post/:userId", isSignedIn, isAuthenticated, createPost);
 router.put(
   "/api/update/:getPostById/:userId",
@@ -40,6 +39,7 @@ router.put(
   updatePost
 );
 
+// delete routes // not implemented at frontend yet
 router.delete(
   "/api/delete/:getPostById/:userId",
   isSignedIn,
