@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { signup } from "../helper/apicalls";
 import { Redirect } from "react-router-dom";
 import Style from "./signup.module.css";
-
+import Button from "react-bootstrap/Button";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Form from "react-bootstrap/Form";
 const Signup = () => {
   const [value, setValue] = useState({
     username: "",
@@ -78,34 +80,51 @@ const Signup = () => {
 
   return (
     <div className={Style.login}>
-      {successMessage()}
-      {errorMessage()}
       <form>
         <h2>Signup</h2>
-        <input
-          placeholder="username"
-          type="text"
-          onChange={handleChange("username")}
-          required
-          name="username"
-        />
-        <input
-          placeholder="Email"
-          type="email"
-          onChange={handleChange("email")}
-          required
-          name="email"
-        />
-        <input
-          placeholder="Password"
-          type="password"
-          onChange={handleChange("password")}
-          required
-          name="password"
-        />
-        <button onClick={onSubmit} type="submit">
+        {/* Username */}
+        <FloatingLabel
+          controlId="floatingInput"
+          label="Username"
+          className="mb-3"
+        >
+          <Form.Control
+            type="text"
+            placeholder="Jhon Doe"
+            onChange={handleChange("username")}
+            required
+            name="username"
+          />
+        </FloatingLabel>
+        {/* Email */}
+        <FloatingLabel
+          controlId="floatingInput"
+          label="Email address"
+          className="mb-3"
+        >
+          <Form.Control
+            placeholder="Email"
+            type="email"
+            onChange={handleChange("email")}
+            required
+            name="email"
+          />
+        </FloatingLabel>
+        {/*  */}
+
+        <FloatingLabel controlId="floatingPassword" label="Password">
+          <Form.Control
+            type="password"
+            placeholder="Password"
+            onChange={handleChange("password")}
+            required
+            name="password"
+          />
+        </FloatingLabel>
+
+        <Button varient="primary" onClick={onSubmit} type="submit">
           submit
-        </button>
+        </Button>
       </form>
       {redirect()}
     </div>

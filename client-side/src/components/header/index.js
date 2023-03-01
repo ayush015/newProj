@@ -1,42 +1,86 @@
 import React from "react";
-import { Fragment } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { isAuthenticated, signout } from "../../routes/helper/apicalls";
-import Style from "./Header.module.css";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import Button from "react-bootstrap/Button";
 
 const Header = ({ history }) => {
   const loginLogout = () => {
     return isAuthenticated() ? (
-      <Fragment>
-        <span
-          onClick={() => {
-            signout(() => {
-              history.push("/login");
-            });
-          }}
-          style={{ color: "yellow", cursor: "pointer" }}
-        >
-          LOGOUT
-        </span>
-        <Link to="/new/article">Create</Link>
-      </Fragment>
+      <>
+        <Nav className="me-auto">
+          <Nav.Link>
+            <Button
+              variant="danger"
+              onClick={() => {
+                signout(() => {
+                  history.push("/login");
+                });
+              }}
+            >
+              Logout
+            </Button>
+          </Nav.Link>
+          <Nav.Link>
+            <Button variant="info">
+              <Link
+                to="/new/article"
+                style={{ color: "#fff", textDecoration: "none" }}
+              >
+                Create
+              </Link>
+            </Button>
+          </Nav.Link>
+        </Nav>
+      </>
     ) : (
-      <Fragment>
-        <Link to="/login">Login</Link>
-        <Link to="/signup">signup</Link>
-      </Fragment>
+      <>
+        <Nav.Link className="mt-bottom mt-r">
+          <Button variant="secondary">
+            <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>
+              Blogs
+            </Link>
+          </Button>
+        </Nav.Link>
+        <Nav.Link className="mt-bottom mt-r">
+          <Button variant="primary">
+            <Link to="/login" style={{ color: "#fff", textDecoration: "none" }}>
+              Log In
+            </Link>
+          </Button>
+        </Nav.Link>
+        <Nav.Link>
+          <Button variant="primary">
+            <Link
+              to="/signup"
+              style={{ color: "#fff", textDecoration: "none" }}
+            >
+              Sign In
+            </Link>
+          </Button>
+        </Nav.Link>
+      </>
     );
   };
 
-  return (
-    <header className={Style.header}>
-      <h1>Bloggers Spot</h1>
-      <nav>
-        <Link to="/">blog</Link>
-        {loginLogout()}
-      </nav>
-    </header>
-  );
+  const navBar = () => {
+    return (
+      <Navbar bg="dark" variant="dark" expand="lg">
+        <Container fluid>
+          <Navbar.Brand href="#home">Wordcrafters</Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="me-auto"></Nav>
+            <Nav>{loginLogout()}</Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    );
+  };
+
+  return navBar();
 };
 
 export default withRouter(Header);

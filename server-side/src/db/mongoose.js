@@ -1,10 +1,13 @@
 //Imports
 require("dotenv").config();
 const mongoose = require("mongoose");
+const db =
+  "mongodb+srv://aniket:aniket@wordcrafterscluster.5ltuyai.mongodb.net/?retryWrites=true&w=majority";
 mongoose
   .connect(
     // "mongodb+srv://admin-Ayush:kOknVqEHwoHg7c0j@bloggers-spot.zst4h.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", //production DB hosted on MongoDB Atlas
-    "mongodb://localhost:27017/BloggersSpot", // Local DB
+    // "mongodb://localhost:27017/BloggersSpot", // Local DB
+    db,
     {
       useCreateIndex: true,
       useFindAndModify: false,

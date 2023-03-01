@@ -7,7 +7,7 @@ import Login from "./routes/login/index";
 import Signup from "./routes/signup/index";
 import Article from "./routes/article/index";
 import NewArticle from "./routes/NewArticle/index";
-
+import "bootstrap/dist/css/bootstrap.min.css";
 const App = () => {
   const { location } = useContext(__RouterContext);
   const transitions = useTransition(location, (location) => location.pathname, {
@@ -30,7 +30,6 @@ const App = () => {
               <Route exact path="/login" component={Login} />
               <Route exact path="/signup" component={Signup} />
               <Route path="/article/:postId" component={Article} />
-              {/* <Route path="/edit/:slug" component={NewArticle} /> */}
               <Route path="/new/article" component={NewArticle} />
               <Redirect to="/" />
             </Switch>

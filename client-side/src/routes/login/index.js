@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 import { authenticate, isAuthenticated, signin } from "../helper/apicalls";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Form from "react-bootstrap/Form";
 import Style from "./Login.module.css";
+import Button from "react-bootstrap/Button";
 
 const Login = () => {
   const [value, setValue] = useState({
@@ -12,7 +15,6 @@ const Login = () => {
   });
 
   const { email, password, error, redirect } = value;
-  // const { user } = isAuthenticated();
 
   const handleChange = (name) => (e) => {
     setValue({ ...value, error: false, [name]: e.target.value });
@@ -59,24 +61,32 @@ const Login = () => {
     <div className={Style.login}>
       <form>
         <h2>Login</h2>
-        {errorMessage()}
-        <input
-          placeholder="Email"
-          type="email"
-          onChange={handleChange("email")}
-          required
-          name="email"
-        />
-        <input
-          placeholder="Password"
+        <FloatingLabel
+          controlId="floatingInput"
+          label="Email address"
+          className="mb-3"
+        >
+          <Form.Control
+            type="email"
+            placeholder="name@example.com"
+            onChange={handleChange("email")}
+            name="email"
+            required
+          />
+        </FloatingLabel>
+        <FloatingLabel
+          controlId="floatingPassword"
+          label="Password"
           type="password"
           onChange={handleChange("password")}
           required
           name="password"
-        />
-        <button onClick={onSubmit} type="submit">
+        >
+          <Form.Control type="password" placeholder="Password" />
+        </FloatingLabel>
+        <Button variant="primary" onClick={onSubmit} type="submit">
           Login
-        </button>
+        </Button>
       </form>
       {performRedirect()}
     </div>

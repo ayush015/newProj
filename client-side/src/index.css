@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
-@import url('https://css.gg/spinner-two.css');
+@import url("https://css.gg/spinner-two.css");
 
 html,
 body {
@@ -19,4 +19,14 @@ body {
 
 * {
   box-sizing: border-box;
+}
+
+.mt-r {
+  margin-right: 1rem;
+}
+
+@media only screen and (max-width: 600px) {
+  .mt-bottom {
+    margin-bottom: 1rem;
+  }
 }

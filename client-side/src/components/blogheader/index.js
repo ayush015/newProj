@@ -13,9 +13,13 @@ const Blogheader = ({ image, title, description, createdAt }) => {
   };
 
   return (
-    <SkeletonTheme color="#161f27" highlightColor="#324759">
+    <SkeletonTheme
+      color="#161f27"
+      highlightColor="#324759"
+      style={{ borderRadius: "1rem" }}
+    >
       <div className={Style.headerContainer}>
-        <div className={Style.imgContainer}>{renderImg(image)}</div>
+        {/* <div className={Style.imgContainer}>{renderImg(image)}</div> */}
         <div className={Style.titleContainer}>
           <h3 className={Style.title}>{title || <Skeleton />}</h3>
           <p className={Style.subtitle}>

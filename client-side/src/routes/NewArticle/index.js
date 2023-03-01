@@ -3,7 +3,9 @@ import Style from "./NewArticle.module.css";
 import { isAuthenticated } from "../helper/apicalls";
 import { newArticle } from "./helper/apicall";
 import { Redirect } from "react-router-dom";
-
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 const NewArticle = () => {
   const [post, setPost] = useState({
     image: "",
@@ -63,42 +65,64 @@ const NewArticle = () => {
 
   return (
     <form className={Style.form}>
-      <input
-        type="text"
-        required
-        placeholder="Url image layout"
-        name="image"
-        value={post.image}
-        onChange={handleChange}
-      />
-      <input
-        type="text"
-        required
-        placeholder="Title"
-        value={post.title}
-        name="title"
-        onChange={handleChange}
-      />
-      <input
-        type="text"
-        required
-        placeholder="Description"
-        value={post.description}
-        name="description"
-        onChange={handleChange}
-      />
+      <FloatingLabel
+        controlId="floatingInput"
+        label="Url image layout"
+        className="mb-3"
+      >
+        <Form.Control
+          type="text"
+          required
+          placeholder=""
+          name="image"
+          value={post.image}
+          onChange={handleChange}
+        />
+      </FloatingLabel>
+      {/*  */}
+      <FloatingLabel controlId="floatingInput" label="Title" className="mb-3">
+        <Form.Control
+          type="text"
+          required
+          placeholder="Title"
+          value={post.title}
+          name="title"
+          onChange={handleChange}
+        />
+      </FloatingLabel>
+      <FloatingLabel
+        controlId="floatingInput"
+        label="Description"
+        className="mb-3"
+      >
+        <Form.Control
+          type="text"
+          required
+          placeholder="Description"
+          value={post.description}
+          name="description"
+          onChange={handleChange}
+        />
+      </FloatingLabel>
+
       <textarea
         required
-        placeholder="Markdown here"
         value={post.markdown}
         name="markdown"
+        placeholder="mark down...."
         onChange={handleChange}
       />
+
       <div>
-        <button>Back</button>
-        <button onClick={onSubmit} type="submit">
+        <Button
+          variant="primary"
+          onClick={onSubmit}
+          type="submit"
+          style={{ marginTop: "1rem" }}
+        >
+          {" "}
           create
-        </button>
+        </Button>
       </div>
       {performRedirect()}
     </form>
